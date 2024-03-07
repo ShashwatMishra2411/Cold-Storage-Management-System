@@ -1,17 +1,11 @@
-const {Client} = require('pg');
+const express = require('express');
+const app = express();
 
-const client = new Client({
-    host: "localhost",
-    user: "postgres",
-    port: "5432",
-    password: "rootUser",
-    database: "coldstorage",
-})
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-client.connect();
+app.use('/customers', require('./Customers/routes/userRoutes'));
 
-client.query(`select * from users`,(err, res)=>{
-    if(err) console.log(err.message);
-    else console.log(res.rows);
-    client.end;
+app.listen(3000, ()=>{
+    console.log('Server is running on port 3000...');
 })
