@@ -1,0 +1,40 @@
+.homeWrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.clientWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: white;
+    color: #2eb2ff;
+}
+
+.clientWrap:hover {
+    background-color: #2eb2ff;
+    color: white;
+    cursor: pointer;
+}
+
+.ownerWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #2eb2ff;
+    color: white;
+}
+
+.ownerWrap:hover {
+    background-color: white;
+    color: #2eb2ff;
+    cursor: pointer;
+}
