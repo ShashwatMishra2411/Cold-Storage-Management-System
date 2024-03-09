@@ -1,11 +1,7 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
 const client = require('../../db');
-const router = express.Router();
-require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
-// console.log(process.env.PRIVATE_KEY);
-router.post('/signup',async (req, res)=>{
+const signup = async (req, res, next)=>{
     const {username, password} = req.body;
     await client.query(`SELECT * FROM customers WHERE username = '${username}'`, (err, result)=>{
             if(result.rows.length > 0){
@@ -23,9 +19,9 @@ router.post('/signup',async (req, res)=>{
                 })
             }
     })
-})
+}
 
-router.post('/login', async (req, res)=>{
+const login = async (req, res, next)=>{
     const {username, password} = req.body;
     await client.query(`SELECT * FROM customers WHERE username = '${username}' AND password = '${password}'`, (err, result)=>{
         if(result.rows.length > 0){
@@ -37,9 +33,9 @@ router.post('/login', async (req, res)=>{
             res.json({message: 'Invalid username or password'});
         }
     })
-})
+}
 
-router.get('/verifyJWT', (req, res)=>{
+const verifyJWT = async (req, res)=>{
     const token = req.headers['authorization'];
     if(token){
         jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded)=>{
@@ -54,6 +50,5 @@ router.get('/verifyJWT', (req, res)=>{
     else{
         res.json({message: 'Token not provided'});
     }
-})
-
-module.exports = router;
+}
+module.exports = {signup, login, verifyJWT};
