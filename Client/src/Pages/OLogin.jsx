@@ -1,4 +1,4 @@
-function OLogin() {
+export default function OLogin() {
     return (
         <div>
             <h1>OLogin</h1>

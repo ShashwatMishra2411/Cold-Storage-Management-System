@@ -1,6 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home.jsx';
-function App() {
+import CSignup from './Pages/CSignup.jsx';
+import CLogin from './Pages/CLogin.jsx';
+import OSignup from './Pages/OSignup.jsx';
+import OLogin from './Pages/OLogin.jsx';
+import CDashboard from './Pages/CDashboard.jsx';
+import ODashboard from './Pages/ODashboard.jsx';
+export default function App() {
     return (
         <div className='appWrap' style={{ height: "100%", width: "100%" }}>
             <Routes>

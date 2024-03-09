@@ -7,34 +7,32 @@
     width: 100vw;
 }
 
-.clientWrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.bigTxt {
+    height: 110vh;
+    width: 110vw;
+    margin: 0;
+    padding: 0;
+    overflow-wrap: break-word;
+    position: relative;
+    top: -5vh;
+    left: -5vw;
+}
+
+.pg {
     height: 100vh;
-    background-color: white;
-    color: #2eb2ff;
-}
-
-.clientWrap:hover {
-    background-color: #2eb2ff;
+    width: 100vw;
+    background-color: #170969;
     color: white;
-    cursor: pointer;
+    font-size: 6vh;
+    line-height: 5vh;
+    overflow: hidden;
+    font-family: "Notable", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    padding: 0%;
 }
 
-.ownerWrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #2eb2ff;
-    color: white;
-}
-
-.ownerWrap:hover {
-    background-color: white;
+.bigWrd:hover {
     color: #2eb2ff;
     cursor: pointer;
 }
