@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use('/customers', require('./Customers/routes/userRoutes'));
+app.use('/customers', require('./Customers/routes/auth'));
 
 app.use('/owners', require('./Owners/routes/userRoutes'));
 
