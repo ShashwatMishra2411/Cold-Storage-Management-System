@@ -1,59 +1,55 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const client = require('../../db');
+const express = require("express");
 const router = express.Router();
-require('dotenv').config();
+const middleware = require("../middleware/auth");
+const client = require("../../db");
+require("dotenv").config();
 
-// console.log(process.env.PRIVATE_KEY);
-router.post('/signup',async (req, res)=>{
-    const {username, password} = req.body;
-    await client.query(`SELECT * FROM customers WHERE username = '${username}'`, (err, result)=>{
-            if(result.rows.length > 0){
-                res.json({message: 'User already exists'});
-            }
-            else{
-                client.query(`INSERT INTO customers VALUES ('${username}', '${password}')`, (err, result)=>{
-                    if(err){
-                        console.log(err);
-                        res.json({message:err.message});
-                    }
-                    else{
-                        res.json({message: 'User created successfully'});
-                    }
-                })
-            }
-    })
-})
+console.log(router);
+router.post("/signup", middleware.signup);
 
-router.post('/login', async (req, res)=>{
-    const {username, password} = req.body;
-    await client.query(`SELECT * FROM customers WHERE username = '${username}' AND password = '${password}'`, (err, result)=>{
-        if(result.rows.length > 0){
-            // console.log(process.env.PRIVATE_KEY)
-            const token = jwt.sign({username: username}, process.env.PRIVATE_KEY, {expiresIn: '1h', algorithm: 'HS256'});
-            res.json({message: 'Login successful', token: token});
+router.post("/login", middleware.login);
+
+router.get("/verifyJWT", middleware.verifyJWT);
+
+router.post("/items", async (req, res) => {
+  try {
+    const { items, space } = req.body;
+    const chambers = await client.query(`SELECT * FROM chambers `);
+    const commodities = await client.query(`SELECT * FROM commodities`);
+    console.log(items);
+    console.log(space);
+    let messages = [];
+    let sent = [];
+    const selectedChambers = [];
+
+    for (const item of items) {
+      for (const commodity of commodities.rows) {
+        if ((commodity.name).trim().toLowerCase() === item.trim().toLowerCase()) {
+          const selected = await client.query(`SELECT * FROM chambers WHERE chamber_id = '${commodity.chamber_id}'`);
+          console.log(selected.rows);
+          selectedChambers.push(selected.rows);
         }
-        else{
-            res.json({message: 'Invalid username or password'});
-        }
-    })
-})
+      }
+      if(selectedChambers.length === 0){
+        messages.push(`No such item found: ${item}`);
+        sent.push(chambers.rows.sort((a, b) => b.capacity - a.capacity))
+      }else{
+        messages.push(`Item found: ${item}`);
+        sent.push(selectedChambers.sort((a, b) => b.capacity - a.capacity));
+      }
+    }
 
-router.get('/verifyJWT', (req, res)=>{
-    const token = req.headers['authorization'];
-    if(token){
-        jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded)=>{
-            if(err){
-                res.json({message: 'Invalid token'});
-            }
-            else{
-                res.json({message: 'Token is valid', decoded: decoded});
-            }
-        })
+    console.log(selectedChambers.length, selectedChambers);
+
+    if (selectedChambers.length === 0) {
+      res.json({ message: messages, chambers: sent });
+    } else {
+      res.json({ message: messages, chambers: sent });
     }
-    else{
-        res.json({message: 'Token not provided'});
-    }
-})
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 module.exports = router;
