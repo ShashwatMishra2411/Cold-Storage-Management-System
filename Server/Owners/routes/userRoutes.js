@@ -12,6 +12,8 @@ router.post('/login', login);
 
 router.get('/verifyJWT', verifyJWT);
 
+router.get('')
+
 // router.post('/signup',async (req, res)=>{
 //     console.log(req.body);
 //     console.log("hello");
