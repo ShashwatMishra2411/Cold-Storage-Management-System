@@ -63,4 +63,4 @@ const verifyJWT = async (req, res) => {
     res.json({ message: "Token not provided" });
   }
 };
-module.exports = { signup, login, verifyJWT };
+module.exports = { signup, login, verifyJWT};
