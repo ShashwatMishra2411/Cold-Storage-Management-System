@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const {signup, login, verifyJWT} = require('../middleware/auth');
 require("dotenv").config();
-const owner = require('../../db');
+const {getMachinery, addMachinery} = require('../middleware/machinery');
+const {getInfrastructure, addInfrastructure} = require('../middleware/infrastructure');
 
 
 router.post('/signup', signup);
@@ -12,7 +13,13 @@ router.post('/login', login);
 
 router.get('/verifyJWT', verifyJWT);
 
-router.get('')
+router.get('/machinery', getMachinery);
+
+router.post('/addMachinery', addMachinery);
+
+router.post('/addInfrastructure', addInfrastructure);
+
+router.get('/infrastructure', getInfrastructure);
 
 // router.post('/signup',async (req, res)=>{
 //     console.log(req.body);
