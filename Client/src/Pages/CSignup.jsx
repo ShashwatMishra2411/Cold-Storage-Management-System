@@ -1,8 +1,9 @@
 import { useState } from "react";
-
+import './signUp.css';
 export default function CSignup() {
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
+    const [password, setpassword] = useState("");
 
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState("");
@@ -11,21 +12,20 @@ export default function CSignup() {
         // This will prevent page refresh
         e.preventDefault();
 
-        // replace this with your own unique endpoint URL
         fetch("/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json"
             },
-            body: JSON.stringify({ email: email, message: message })
+            body: JSON.stringify({ username: username, email: email, password: password })
         })
             .then((res) => res.json())
             .then((res) => {
                 if (res.code === 200) {
                     setSubmitted(true);
                 } else {
-                    setError(res.message);
+                    setError(res.password);
                 }
             })
             .catch((error) => setError(error));
@@ -36,28 +36,51 @@ export default function CSignup() {
     }
 
     if (submitted) {
-        return <p>We've received your message, thank you for contacting us!</p>;
+        return <p>We've received your password, thank you for contacting us!</p>;
     }
 
+
     return (
-        <form onSubmit={submit}>
-            <label htmlFor="email">Email</label>
-            <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-
-            <label htmlFor="message">Message</label>
-            <textarea
-                id="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-
-            <button type="submit">Send</button>
-        </form>
+        <div className="back">
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column' }}>
+                <label htmlFor="username">Username</label>
+                <input
+                    id="username"
+                    type="username"
+                    className="txt"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <label htmlFor="email">Email</label>
+                <input
+                    id="email"
+                    type="email"
+                    className="txt"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <label htmlFor="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    className="txt"
+                    value={password}
+                    onChange={(e) => setpassword(e.target.value)}
+                    required
+                />
+                <label htmlFor="confPassword">Confirm Password</label>
+                <input
+                    type="password"
+                    id="confPassword"
+                    className="txt"
+                    value={password}
+                    onChange={(e) => setpassword(e.target.value)}
+                    required
+                />
+                <button type="submit" className="subBut">Submit</button>
+            </form>
+        </div>
     );
 }

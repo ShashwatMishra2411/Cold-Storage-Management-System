@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './login.css';
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setpassword] = useState("");
@@ -10,7 +11,6 @@ export default function Login() {
         // This will prevent page refresh
         e.preventDefault();
 
-        // replace this with your own unique endpoint URL
         fetch("/signup", {
             method: "POST",
             headers: {
@@ -34,44 +34,15 @@ export default function Login() {
         return <p>{error}</p>;
     }
 
-    if (submitted) {
-        return <p>We've received your password, thank you for contacting us!</p>;
-    }
 
-    const back = {
-        backgroundColor: 'aquamarine',
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontFamily: 'Bungee',
-    };
-    const txt = {
-        border: '3px solid black',
-        borderRadius: '7px',
-        lineHeight: '20px',
-        fontFamily: 'Bungee',
-    }
-    const subBut = {
-        backgroundColor: 'black',
-        color: 'white',
-        padding: '5px',
-        margin: '10px',
-        borderRadius: '10px',
-        fontSize: '20px',
-        textDecoration: 'none',
-        fontFamily: 'Bungee',
-    }
     return (
-        <div className="back" style={back}>
+        <div className="back">
             <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column' }}>
                 <label htmlFor="username">Username</label>
                 <input
                     id="username"
                     type="username"
-                    style={txt}
+                    className="txt"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -80,11 +51,12 @@ export default function Login() {
                 <input
                     type="password"
                     id="password"
-                    style={txt}
+                    className="txt"
                     value={password}
                     onChange={(e) => setpassword(e.target.value)}
+                    required
                 />
-                <button type="submit" style={subBut}>Submit</button>
+                <button type="submit" className="subBut">Submit</button>
             </form>
         </div>
     );
