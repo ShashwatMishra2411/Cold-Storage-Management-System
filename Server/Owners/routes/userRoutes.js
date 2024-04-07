@@ -5,6 +5,8 @@ const {signup, login, verifyJWT} = require('../middleware/auth');
 require("dotenv").config();
 const {getMachinery, addMachinery} = require('../middleware/machinery');
 const {getInfrastructure, addInfrastructure} = require('../middleware/infrastructure');
+const { getRawMaterials, addRawMaterials } = require('../middleware/rawMaterials');
+const { getGrowth } = require('../middleware/updateGrowth');
 
 
 router.post('/signup', signup);
@@ -20,6 +22,12 @@ router.post('/addMachinery', addMachinery);
 router.post('/addInfrastructure', addInfrastructure);
 
 router.get('/infrastructure', getInfrastructure);
+
+router.get('/rawMaterials', getRawMaterials);
+
+router.post('/addRawMaterials', addRawMaterials)
+
+router.get('/growthupdate', getGrowth);
 
 // router.post('/signup',async (req, res)=>{
 //     console.log(req.body);

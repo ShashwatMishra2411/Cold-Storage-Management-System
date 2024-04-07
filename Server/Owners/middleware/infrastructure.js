@@ -1,7 +1,7 @@
-const {infrastructure} = require('../../db');
+const client = require('../../db');
 
 const getInfrastructure = async (req, res, next) => {
-    await infrastructure.query('SELECT * FROM infrastructure', (err, result) => {
+    await client.query('SELECT * FROM infrastructure', (err, result) => {
         if (err) {
             console.log(err);
         } else {
@@ -15,7 +15,7 @@ const addInfrastructure = async (req, res, next) => {
     const {item, rate, quantity, uid} = req.body;
     console.log(item)
     const tot = rate * quantity;
-    await infrastructure.query(`INSERT INTO infrastructure (items, rate, quantity, uid, total) VALUES ('${item}', ${rate}, ${quantity}, ${uid}, ${tot})`, (err, result) => {
+    await client.query(`INSERT INTO infrastructure (items, rate, quantity, uid, total) VALUES ('${item}', ${rate}, ${quantity}, ${uid}, ${tot})`, (err, result) => {
         if (err) {
             console.log(err);
         } else {

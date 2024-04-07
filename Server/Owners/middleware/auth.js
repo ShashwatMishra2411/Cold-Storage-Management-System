@@ -22,7 +22,7 @@ const signup = async (req, res, next) => {
                 res.json({message: 'User already exists'});
             }
             else{
-                owner.query(`INSERT INTO owners (username, password, email, mobno) VALUES ( '${username}', '${password}', '${email}', ${mobno})`, (err, result)=>{
+                owner.query(`INSERT INTO owners (username, password, email, mobno) VALUES ( '${username}', '${password}', '${email}', ${mobno}`, (err, result)=>{
                     if(err){
                         console.log(err);
                         res.json({message:err.message});

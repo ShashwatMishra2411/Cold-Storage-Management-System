@@ -1,7 +1,7 @@
-const {machinery} = require('../../db');
+const client = require('../../db');
 
 const getMachinery = async (req, res, next) => {
-    await machinery.query('SELECT * FROM machinery', (err, result) => {
+    await client.query('SELECT * FROM machinery', (err, result) => {
         if (err) {
             console.log(err);
         } else {
@@ -15,7 +15,7 @@ const addMachinery = async (req, res, next) => {
     const {item, rate, quantity, uid} = req.body;
     console.log(item)
     const tot = rate * quantity;
-    await machinery.query(`INSERT INTO machinery (items, rate, quantity, uid, total) VALUES ('${item}', ${rate}, ${quantity}, ${uid}, ${tot})`, (err, result) => {
+    await client.query(`INSERT INTO machinery (items, rate, quantity, uid, total) VALUES ('${item}', ${rate}, ${quantity}, ${uid}, ${tot})`, (err, result) => {
         if (err) {
             console.log(err);
         } else {
