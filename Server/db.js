@@ -8,4 +8,12 @@ const client = new Pool({
     database: "coldstorage",
 })
 
-module.exports = client;
+const owner = new Pool({
+    host: "localhost",
+    user: "postgres",
+    poer: "5432",
+    password: "rootUser",
+    database: "coldstorage",
+})
+
+module.exports = {client, owner};
