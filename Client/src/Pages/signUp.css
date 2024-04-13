@@ -1,0 +1,32 @@
+.back {
+    background-color: aquamarine;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Bungee;
+}
+
+.txt {
+    border: 3px solid black;
+    border-radius: 7px;
+    line-height: 20px;
+    font-family: Bungee;
+}
+
+.subBut {
+    background-color: black;
+    color: white;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    text-decoration: none;
+    font-family: Bungee;
+}
+
+.subBut:hover {
+    cursor: pointer;
+}

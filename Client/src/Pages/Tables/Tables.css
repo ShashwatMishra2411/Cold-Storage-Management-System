@@ -1,0 +1,23 @@
+.back {
+    background-color: aquamarine;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Bungee', sans-serif;
+}
+
+table {
+    background-color: white;
+    border-radius: 5px;
+    border: solid black 5px;
+    border-collapse: collapse;
+    width: 60%;
+}
+
+th {
+    border: solid black 5px;
+    border-collapse: collapse;
+}
