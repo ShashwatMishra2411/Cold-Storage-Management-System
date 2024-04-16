@@ -22,7 +22,6 @@ export default function CChambers() {
                     <th>Temperature</th>
                     <th>Commodities</th>
                     <th>Coolant</th>
-
                 </tr>
                 <tbody>
                     {rows.map((row, index) => (
