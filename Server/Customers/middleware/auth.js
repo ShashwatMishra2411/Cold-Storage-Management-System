@@ -32,6 +32,7 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
+  console.log(req.body)
   await client.query(
     `SELECT * FROM customers WHERE username = '${username}' AND password = '${password}'`,
     (err, result) => {
@@ -44,7 +45,7 @@ const login = async (req, res, next) => {
         );
         res.json({ message: "Login successful", token: token });
       } else {
-        res.json({ message: "Invalid username or password" });
+        res.status(404).json({ message: "Invalid username or password" });
       }
     }
   );

@@ -11,7 +11,7 @@ export default function Login() {
         // This will prevent page refresh
         e.preventDefault();
         try{
-            await fetch(`${URL_ORIGIN}/${localStorage.getItem("user")}/login`, {
+            const token = await fetch(`${URL_ORIGIN}/${localStorage.getItem("user")}s/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -19,9 +19,18 @@ export default function Login() {
                 },
                 body: JSON.stringify({ username: username, password: password })
             })
-            navigate(`/${localStorage.getItem("user")[0].toUpperCase()}dashboard`);
+            // navigate(`/${localStorage.getItem("user")[0].toUpperCase()}dashboard`);
+            // console.log(token);
+            if(token.status === 200){
+                const data = await token.json();
+                localStorage.setItem("token", data.token);
+                navigate(`/${localStorage.getItem("user")[0].toUpperCase()}dashboard`);
+            }else{
+                const data = await token.json();
+                alert(data.message);
+            }
         }catch(err){
-            console.log(err)
+            alert(err.message)
         }
     }
 
