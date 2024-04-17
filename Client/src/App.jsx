@@ -15,7 +15,9 @@ import OCustomers from './Pages/Tables/OCustomers.jsx';
 import OFinances from './Pages/Tables/OFinances.jsx';
 import OFixedCapital from './Pages/Tables/OFixedCapital.jsx';
 import OWorkingCapital from './Pages/Tables/OWorkingCapital.jsx';
+import JwtContextProvider from './Contexts/AuthContext.jsx';
 export default function App() {
+    let tokenValue = localStorage.getItem("token");
     return (
         <div className='appWrap' style={{ height: "100%", width: "100%" }}>
             <Routes>
@@ -23,6 +25,7 @@ export default function App() {
                 <Route path="/CSignup" element={<CSignup />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/OSignup" element={<OSignup />} />
+                <JwtContextProvider value={tokenValue}>
                 <Route path="/CDashboard" element={<CDashboard />} />
                 <Route path="/Cprofile" element={<CProfile />} />
                 <Route path="/CPurchases" element={<CPurchases />} />
@@ -35,6 +38,7 @@ export default function App() {
                 <Route path="/OFinances" element={<OFinances />} />
                 <Route path="/OFixedCapital" element={<OFixedCapital />} />
                 <Route path="/OWorkingCapital" element={<OWorkingCapital />} />
+                </JwtContextProvider>
             </Routes>
         </div>
     )
