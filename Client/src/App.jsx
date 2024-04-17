@@ -21,7 +21,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/CSignup" element={<CSignup />} />
-                <Route path="/CLogin" element={<Login />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/OSignup" element={<OSignup />} />
                 <Route path="/CDashboard" element={<CDashboard />} />
                 <Route path="/Cprofile" element={<CProfile />} />

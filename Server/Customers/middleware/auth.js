@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const signup = async (req, res, next) => {
   const { username, password } = req.body;
+  console.log(req.body);
   if (!username || !password) {
     res.json({ message: "Username and password are required" });
   } else {

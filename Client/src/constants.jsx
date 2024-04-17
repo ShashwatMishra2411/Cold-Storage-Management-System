@@ -1,0 +1,1 @@
+export const URL_ORIGIN = "http://localhost:3000"

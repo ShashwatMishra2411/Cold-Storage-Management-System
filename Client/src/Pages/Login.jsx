@@ -1,37 +1,28 @@
 import React, { useState } from "react";
+import { URL_ORIGIN } from "../constants";
+import {useNavigate} from 'react-router-dom';
 import './login.css';
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setpassword] = useState("");
+    const navigate = useNavigate();
 
-    const [submitted, setSubmitted] = useState(false);
-    const [error, setError] = useState("");
-
-    function submit(e) {
+     async function submit(e) {
         // This will prevent page refresh
         e.preventDefault();
-
-        fetch("/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            },
-            body: JSON.stringify({ username: username, password: password })
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.code === 200) {
-                    setSubmitted(true);
-                } else {
-                    setError(res.password);
-                }
+        try{
+            await fetch(`${URL_ORIGIN}/${localStorage.getItem("user")}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify({ username: username, password: password })
             })
-            .catch((error) => setError(error));
-    }
-
-    if (error) {
-        return <p>{error}</p>;
+            navigate(`/${localStorage.getItem("user")[0].toUpperCase()}dashboard`);
+        }catch(err){
+            console.log(err)
+        }
     }
 
 

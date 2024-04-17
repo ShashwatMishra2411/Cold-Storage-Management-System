@@ -1,48 +1,38 @@
 import { useState } from "react";
+import { URL_ORIGIN } from "../constants";
+import {useNavigate} from 'react-router-dom';
 import './signUp.css';
 export default function CSignup() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setpassword] = useState("");
+    const navigate = useNavigate();
+    // const [submitted, setSubmitted] = useState(false);
+    // const [error, setError] = useState("");
 
-    const [submitted, setSubmitted] = useState(false);
-    const [error, setError] = useState("");
-
-    function submit(e) {
+    async function handleSubmit(e) {
         // This will prevent page refresh
         e.preventDefault();
-
-        fetch("/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            },
-            body: JSON.stringify({ username: username, email: email, password: password })
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.code === 200) {
-                    setSubmitted(true);
-                } else {
-                    setError(res.password);
-                }
+        try{
+            await fetch(`${URL_ORIGIN}/customers/signup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify({ username: username, password: password })
             })
-            .catch((error) => setError(error));
-    }
-
-    if (error) {
-        return <p>{error}</p>;
-    }
-
-    if (submitted) {
-        return <p>We've received your password, thank you for contacting us!</p>;
+            localStorage.setItem("user", "customer");
+            navigate('/login');
+        }catch(err){
+            console.log(err)
+        }
     }
 
 
     return (
         <div className="back">
-            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
                 <label htmlFor="username">Username</label>
                 <input
                     id="username"
