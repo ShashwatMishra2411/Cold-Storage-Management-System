@@ -13,7 +13,7 @@ export default function CChambers() {
     jwtCVerify();
     const token = localStorage.getItem("token");
     console.log(token);
-    axios.post(
+    axios.get(
       `${URL_ORIGIN}/customers/verifyJWT`,
       {},
       {

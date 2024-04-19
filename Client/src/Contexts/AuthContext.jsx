@@ -11,7 +11,7 @@ function JwtContextProvider({ children }) {
     try {
       if (token) {
         const response = await fetch(`${URL_ORIGIN}/customers/verifyJWT`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
