@@ -2,11 +2,18 @@ import "./Tables.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contexts/AuthContext";
+import GetChambers from "./GetChambers";
 
 export default function CChambers() {
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
   const { isCAuthenticated } = useAuth();
+  const [seen, setSeen] = useState(false);
+
+  function togglePop() {
+    setSeen(!seen);
+  }
+
   useEffect(() => {
     if (!isCAuthenticated) {
       console.log(isCAuthenticated);
@@ -24,7 +31,6 @@ export default function CChambers() {
 
   return (
     <>
-      {isCAuthenticated ? null : navigate(-1)}
       <div className="back">
         <div style={{ fontSize: "50px" }}>Chambers</div>
         <table>
@@ -46,6 +52,11 @@ export default function CChambers() {
             ))}
           </tbody>
         </table>
+        <br />
+        <button className="chamberForm" onClick={togglePop}>
+          Add Chambers
+        </button>
+        {seen ? <GetChambers toggle={togglePop} /> : null}
       </div>
     </>
   );
