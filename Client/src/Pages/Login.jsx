@@ -27,7 +27,7 @@ export default function Login() {
                 const data = await token.json();
                 localStorage.setItem("token", data.token);
                 console.log("called");
-                jwtCVerify();
+                await jwtCVerify();
                 navigate(`/${localStorage.getItem("user")[0].toUpperCase()}dashboard`);
             }else{
                 const data = await token.json();
