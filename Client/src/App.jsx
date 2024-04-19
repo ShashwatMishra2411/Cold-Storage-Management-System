@@ -15,11 +15,10 @@ import OCustomers from "./Pages/Tables/OCustomers.jsx";
 import OFinances from "./Pages/Tables/OFinances.jsx";
 import OFixedCapital from "./Pages/Tables/OFixedCapital.jsx";
 import OWorkingCapital from "./Pages/Tables/OWorkingCapital.jsx";
-import JwtContextProvider from "./Contexts/AuthContext.jsx";
 export default function App() {
   return (
     <div className="appWrap" style={{ height: "100%", width: "100%" }}>
-      <JwtContextProvider>
+      {/* <JwtContextProvider> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/CSignup" element={<CSignup />} />
@@ -38,7 +37,7 @@ export default function App() {
           <Route path="/OFixedCapital" element={<OFixedCapital />} />
           <Route path="/OWorkingCapital" element={<OWorkingCapital />} />
         </Routes>
-      </JwtContextProvider>
+      {/* </JwtContextProvider> */}
     </div>
   );
 }
