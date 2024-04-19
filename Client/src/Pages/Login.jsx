@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { URL_ORIGIN } from "../constants";
 import {useNavigate} from 'react-router-dom';
 import './login.css';
+import { useAuth } from "../Contexts/AuthContext";
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setpassword] = useState("");
     const navigate = useNavigate();
+    const {jwtCVerify} = useAuth();
 
      async function submit(e) {
         // This will prevent page refresh
@@ -24,6 +26,8 @@ export default function Login() {
             if(token.status === 200){
                 const data = await token.json();
                 localStorage.setItem("token", data.token);
+                console.log("called");
+                jwtCVerify();
                 navigate(`/${localStorage.getItem("user")[0].toUpperCase()}dashboard`);
             }else{
                 const data = await token.json();

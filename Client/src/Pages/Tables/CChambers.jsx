@@ -2,12 +2,14 @@ import "./Tables.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contexts/AuthContext";
+import axios from "axios";
+import { URL_ORIGIN } from "../../constants";
 import GetChambers from "./GetChambers";
 
 export default function CChambers() {
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
-  const { isCAuthenticated } = useAuth();
+  const { isCAuthenticated, jwtCVerify } = useAuth();
   const [seen, setSeen] = useState(false);
 
   function togglePop() {
@@ -15,10 +17,18 @@ export default function CChambers() {
   }
 
   useEffect(() => {
-    if (!isCAuthenticated) {
-      console.log(isCAuthenticated);
-      navigate("/login");
-    }
+    jwtCVerify();
+    const token = localStorage.getItem("token");
+    console.log(token);
+    axios.get(
+      `${URL_ORIGIN}/customers/verifyJWT`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }, []);
 
   useEffect(() => {
