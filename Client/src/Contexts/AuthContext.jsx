@@ -1,52 +1,44 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { URL_ORIGIN } from "../constants";
+import axios from "axios";
 const jwtContext = createContext();
 function JwtContextProvider({ children }) {
   const [isCAuthenticated, setIsCAuthenticated] = useState(false);
   const [isOAuthenticated, setIsOAuthenticated] = useState(false);
+  console.log("isAuth = ", isCAuthenticated);
 
-  async function jwtCVerify() {
-    let token = localStorage.getItem("token");
-    console.log(token);
+  const jwtCVerify = async () => {
     try {
+      const token = localStorage.getItem("token");
       if (token) {
-        const response = await fetch(`${URL_ORIGIN}/customers/verifyJWT`, {
-          method: "GET",
+        const response = await axios.get(`${URL_ORIGIN}/customers/verifyJWT`, {
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `${token}`,
-            "Accept": "application/json",
+            Authorization: `${token}`,
           },
         });
-        console.log(token);
         if (response.status === 200) {
           setIsCAuthenticated(true);
-          console.log(response.json());
         } else {
           setIsCAuthenticated(false);
         }
       } else {
         setIsCAuthenticated(false);
-        console.log(token);
       }
-      console.log("is = ", isCAuthenticated);
     } catch (err) {
-      console.log("huehue");
-      console.log(err.message);
+      console.log("Error verifying customer JWT:", err);
       setIsCAuthenticated(false);
     }
-  }
-  async function jwtOVerify() {
-    let token = localStorage.getItem("token");
+  };
+
+  const jwtOVerify = async () => {
     try {
-      if (token === undefined || token === null) {
-        setIsOAuthenticated(false);
-      } else {
+      const token = localStorage.getItem("token");
+      if (token) {
         const response = await fetch(`${URL_ORIGIN}/owners/verifyJWT`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            authorization: token,
+            Authorization: token,
             Accept: "application/json",
           },
         });
@@ -55,15 +47,23 @@ function JwtContextProvider({ children }) {
         } else {
           setIsOAuthenticated(false);
         }
+      } else {
+        setIsOAuthenticated(false);
       }
     } catch (err) {
-      setIsCAuthenticated(false);
+      console.log("Error verifying owner JWT:", err);
+      setIsOAuthenticated(false);
     }
-  }
+  };
+
   useEffect(() => {
     jwtCVerify();
     jwtOVerify();
   }, []);
+  // useEffect(() => {
+  //   jwtCVerify();
+  //   jwtOVerify();
+  // }, []);
   const value = { isCAuthenticated, isOAuthenticated, jwtCVerify, jwtOVerify };
   return <jwtContext.Provider value={value}>{children}</jwtContext.Provider>;
 }
