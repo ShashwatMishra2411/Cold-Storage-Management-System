@@ -41,6 +41,7 @@ export default function CChambers() {
 
   return (
     <>
+      {isCAuthenticated ? null : navigate("/login")}
       <div className="back">
         <div style={{ fontSize: "50px" }}>Chambers</div>
         <table>
