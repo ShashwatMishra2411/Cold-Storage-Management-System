@@ -1,47 +1,54 @@
 import { createContext, useEffect, useState, useContext } from "react";
-
+import { URL_ORIGIN } from "../constants";
 const jwtContext = createContext();
 function JwtContextProvider({ children }) {
-  const [isCAuthenticated, setIsCAuthenticated] = useState(true);
-  const [isOAuthenticated, setIsOAuthenticated] = useState(true);
-  let token = localStorage.getItem("token");
+  const [isCAuthenticated, setIsCAuthenticated] = useState(false);
+  const [isOAuthenticated, setIsOAuthenticated] = useState(false);
+
   async function jwtCVerify() {
+    let token = localStorage.getItem("token");
+    console.log(token);
     try {
-      if (token === undefined || token === null) {
-        setIsCAuthenticated(false);
-      } else {
+      if (token) {
         const response = await fetch(`${URL_ORIGIN}/customers/verifyJWT`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            authorization: token,
-            Accept: "application/json",
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json",
           },
-          body: JSON.stringify({ token: token }),
         });
+        console.log(token);
         if (response.status === 200) {
           setIsCAuthenticated(true);
+          console.log(response.json());
         } else {
           setIsCAuthenticated(false);
         }
+      } else {
+        setIsCAuthenticated(false);
+        console.log(token);
       }
+      console.log("is = ", isCAuthenticated);
     } catch (err) {
+      console.log("huehue");
+      console.log(err.message);
       setIsCAuthenticated(false);
     }
   }
   async function jwtOVerify() {
+    let token = localStorage.getItem("token");
     try {
       if (token === undefined || token === null) {
         setIsOAuthenticated(false);
       } else {
         const response = await fetch(`${URL_ORIGIN}/owners/verifyJWT`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             authorization: token,
             Accept: "application/json",
           },
-          body: JSON.stringify({ token: token }),
         });
         if (response.status === 200) {
           setIsOAuthenticated(true);
@@ -57,7 +64,7 @@ function JwtContextProvider({ children }) {
     jwtCVerify();
     jwtOVerify();
   }, []);
-  const value = { isCAuthenticated, isOAuthenticated };
+  const value = { isCAuthenticated, isOAuthenticated, jwtCVerify, jwtOVerify };
   return <jwtContext.Provider value={value}>{children}</jwtContext.Provider>;
 }
 export default JwtContextProvider;

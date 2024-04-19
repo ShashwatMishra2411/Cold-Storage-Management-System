@@ -1,19 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "./CDashboard.css";
 import { useAuth } from "../Contexts/AuthContext";
 import { useEffect } from "react";
 export default function CDashboard() {
   const navigate = useNavigate();
-  const { isCAuthenticated } = useAuth();
+  const { isCAuthenticated, jwtCVerify } = useAuth();
   useEffect(() => {
-    if (!isCAuthenticated) {
-      console.log(isCAuthenticated);
-      navigate("/login");
-    }
+    jwtCVerify();
   }, []);
   return (
     <>
-      {isCAuthenticated ? null : navigate(-1)}
+      {isCAuthenticated ? null : <Navigate to="/login"></Navigate>}
       <div className="back">
         <div style={{ fontSize: "50px" }}>DASHBOARD</div>
         <div className="hub">

@@ -2,16 +2,26 @@ import "./Tables.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contexts/AuthContext";
+import axios from "axios";
+import { URL_ORIGIN } from "../../constants";
 
 export default function CChambers() {
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
-  const { isCAuthenticated } = useAuth();
+  const { isCAuthenticated, jwtCVerify } = useAuth();
   useEffect(() => {
-    if (!isCAuthenticated) {
-      console.log(isCAuthenticated);
-      navigate("/login");
-    }
+    jwtCVerify();
+    const token = localStorage.getItem("token");
+    console.log(token);
+    axios.post(
+      `${URL_ORIGIN}/customers/verifyJWT`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }, []);
 
   useEffect(() => {
