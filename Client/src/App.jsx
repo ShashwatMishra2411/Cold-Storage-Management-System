@@ -1,4 +1,3 @@
-import JwtContextProvider from "./Contexts/AuthContext.jsx";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
 import CSignup from "./Pages/CSignup.jsx";

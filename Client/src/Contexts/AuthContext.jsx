@@ -50,7 +50,7 @@ function JwtContextProvider({ children }) {
         }
       }
     } catch (err) {
-      navigate("/login");
+      setIsCAuthenticated(false);
     }
   }
   useEffect(() => {
