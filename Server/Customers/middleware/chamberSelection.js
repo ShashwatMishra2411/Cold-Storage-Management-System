@@ -21,7 +21,7 @@ const getChambers = async (req, res) => {
         if (selected.rows.length > 0) selectedChambers.push(selected.rows[0]);
       }
     }
-    if (selectedChambers.length === 0) {
+    if (selectedChambers.length === 0) {z
       messages.push(`No such item found: ${item}`);
       sent = chambers.rows.sort((a, b) => b.capacity - a.capacity);
     } else {
