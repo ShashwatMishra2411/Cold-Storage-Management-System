@@ -32,7 +32,7 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
-  console.log(req.body)
+  console.log(req.body);
   await client.query(
     `SELECT * FROM customers WHERE username = '${username}' AND password = '${password}'`,
     (err, result) => {
@@ -56,13 +56,13 @@ const verifyJWT = async (req, res) => {
   if (token) {
     jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
       if (err) {
-        res.json({ message: "Invalid token" });
+        res.status(403).json({ message: "Invalid token" });
       } else {
-        res.json({ message: "Token is valid", decoded: decoded });
+        res.status(200).json({ message: "Token is valid", decoded: decoded });
       }
     });
   } else {
     res.json({ message: "Token not provided" });
   }
 };
-module.exports = { signup, login, verifyJWT};
+module.exports = { signup, login, verifyJWT };
