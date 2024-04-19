@@ -1,3 +1,4 @@
+import JwtContextProvider from "./Contexts/AuthContext.jsx";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
 import CSignup from "./Pages/CSignup.jsx";
@@ -17,10 +18,9 @@ import OFixedCapital from "./Pages/Tables/OFixedCapital.jsx";
 import OWorkingCapital from "./Pages/Tables/OWorkingCapital.jsx";
 import JwtContextProvider from "./Contexts/AuthContext.jsx";
 export default function App() {
-  let tokenValue = localStorage.getItem("token");
   return (
     <div className="appWrap" style={{ height: "100%", width: "100%" }}>
-      <JwtContextProvider value={tokenValue}>
+      <JwtContextProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/CSignup" element={<CSignup />} />
@@ -43,3 +43,4 @@ export default function App() {
     </div>
   );
 }
+
