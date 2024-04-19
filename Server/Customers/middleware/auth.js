@@ -54,6 +54,7 @@ const login = async (req, res, next) => {
 const verifyJWT = async (req, res) => {
   const token = req.headers["authorization"];
   if (token) {
+    console.log("token = ",token)
     jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
       if (err) {
         res.status(403).json({ message: "Invalid token" });

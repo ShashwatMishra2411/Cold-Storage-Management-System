@@ -18,7 +18,7 @@ export default function CChambers() {
       {},
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       }
     );
