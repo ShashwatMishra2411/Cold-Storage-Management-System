@@ -9,28 +9,25 @@ export default function CChambers() {
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
   const { isCAuthenticated, jwtCVerify } = useAuth();
-  useEffect(() => {
-    jwtCVerify();
-    const token = localStorage.getItem("token");
-    console.log(token);
-    axios.get(
-      `${URL_ORIGIN}/customers/verifyJWT`,
-      {},
-      {
-        headers: {
-          Authorization: `${token}`,
-        },
-      }
-    );
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const tableData = [
-      ["1", "1000", "50", "10", "Potatoes", "R22"],
-      ["2", "2000", "60", "15", "Tomatoes", "R134a"],
-    ];
-    setRows(tableData);
-  }, []);
+    async function checkAuthentication() {
+      try {
+        console.log("Called by Dashboard");
+        await jwtCVerify();
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error verifying JWT:", error);
+        setIsLoading(false);
+      }
+    }
+    checkAuthentication();
+  }, [jwtCVerify]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -38,6 +35,7 @@ export default function CChambers() {
       <div className="back">
         <div style={{ fontSize: "50px" }}>Chambers</div>
         <table>
+          <thead>
           <tr>
             <th>CID</th>
             <th>Capacity</th>
@@ -46,6 +44,7 @@ export default function CChambers() {
             <th>Commodities</th>
             <th>Coolant</th>
           </tr>
+          </thead>
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
