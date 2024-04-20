@@ -1,16 +1,32 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import "./CDashboard.css";
 import { useAuth } from "../Contexts/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 export default function CDashboard() {
   const navigate = useNavigate();
   const { isCAuthenticated, jwtCVerify } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    jwtCVerify();
-  }, []);
+    async function checkAuthentication() {
+      try {
+        console.log("Called by Dashboard");
+        await jwtCVerify();
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error verifying JWT:", error);
+        setIsLoading(false);
+      }
+    }
+    checkAuthentication();
+  }, [jwtCVerify]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
-      {isCAuthenticated ? null : <Navigate to="/login"></Navigate>}
+      {!isCAuthenticated && <Navigate to="/login" />}
       <div className="back">
         <div style={{ fontSize: "50px" }}>DASHBOARD</div>
         <div className="hub">
