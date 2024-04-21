@@ -53,7 +53,7 @@ export default function CChambers() {
           console.log("No token found");
         }
       } catch (error) {
-        console.error("Error fetching chambers:", error);
+        console.error("Error fetching chambers:", error.message);
       }
     }
     getChambers();
@@ -87,7 +87,7 @@ export default function CChambers() {
         </table>
         <br />
         <button className="chamberForm" onClick={togglePop}>
-          Add Chambers
+          Add Items
         </button>
         {seen ? <GetChambers toggle={togglePop} /> : null}
       </div>
