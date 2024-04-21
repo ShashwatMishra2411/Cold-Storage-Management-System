@@ -31,6 +31,33 @@ export default function CChambers() {
     checkAuthentication();
   }, [jwtCVerify]);
 
+
+  useEffect(()=>{
+    async function getChambers() {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const response = await axios.get(`${URL_ORIGIN}/customers/chambers`, {
+            headers: {
+              Authorization: `${token}`,
+            },
+          });
+          if (response.status === 200) {
+            const data = response.data;
+            console.log(Object.keys(data[0]));
+            setRows(data);
+          } else {
+            console.log("Error fetching chambers");
+          }
+        } else {
+          console.log("No token found");
+        }
+      } catch (error) {
+        console.error("Error fetching chambers:", error);
+      }
+    }
+    getChambers();
+  }, [])
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -43,18 +70,15 @@ export default function CChambers() {
         <table>
           <thead>
           <tr>
-            <th>CID</th>
-            <th>Capacity</th>
-            <th>Humidity</th>
-            <th>Temperature</th>
-            <th>Commodities</th>
-            <th>Coolant</th>
+            {rows[0] && Object.keys(rows[0]).map((cell, index)=>{
+              return <th key={index}>{cell}</th>
+            })}
           </tr>
           </thead>
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
-                {row.map((cell, cellIndex) => (
+                {Object.values(row).map((cell, cellIndex) => (
                   <td key={cellIndex}>{cell}</td>
                 ))}
               </tr>

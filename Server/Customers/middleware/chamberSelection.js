@@ -10,10 +10,10 @@ const getChambers = async (req, res) => {
 
     jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
       if (err) {
-        console.log(err.message)
+        console.log(err.message);
         return res.status(403).json({ message: "Invalid token" });
       } else {
-        username = decoded
+        username = decoded;
       }
     });
 
@@ -22,9 +22,9 @@ const getChambers = async (req, res) => {
     const selectedChambers = [];
     const users = await client.query(`SELECT username FROM customers`);
     let user_id = 0;
-    users.rows.forEach((user, index)=>{
-      if(user.username === username.username){
-        user_id = index+1;
+    users.rows.forEach((user, index) => {
+      if (user.username === username.username) {
+        user_id = index + 1;
       }
     });
 
@@ -47,7 +47,9 @@ const getChambers = async (req, res) => {
 
     const temperature = Math.floor(Math.random() * (50 - 15 + 1)) + 15;
     const humidity = Math.floor(Math.random() * (90 - 50 + 1)) + 50;
-    const commodity_id = (await client.query(`SELECT commodity_id FROM commodities`)).rows.length + 1;
+    const commodity_id =
+      (await client.query(`SELECT commodity_id FROM commodities`)).rows.length +
+      1;
 
     for (const chamber of sent) {
       if (space === 0) break;
@@ -58,7 +60,7 @@ const getChambers = async (req, res) => {
       capacity = capacity.rows[0].capacity;
 
       let filled = 0;
-      console.log("filled = ", space)
+      console.log("filled = ", space);
       if (capacity < space) {
         space = space - capacity;
         filled = capacity;
@@ -68,7 +70,7 @@ const getChambers = async (req, res) => {
         capacity = capacity - space;
         space = 0;
       }
-      console.log("filled = ", filled)
+      console.log("filled = ", filled);
       try {
         await client.query(
           `INSERT INTO commodities(commodity_id, name, temperature, humidity, chamber_id, amount) VALUES($1, $2, $3, $4, $5, $6)`,
@@ -109,4 +111,35 @@ const getChambers = async (req, res) => {
   }
 };
 
-module.exports = { getChambers };
+const viewChambers = async (req, res) => {
+  try {
+    const chambers = await client.query(`SELECT * FROM chambers`);
+    // res.json(chambers.rows);
+    const token = req.headers["authorization"];
+    jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid token" });
+      } else {
+        const username = decoded.username;
+        const users = await client.query(`SELECT username FROM customers`);
+        let user_id = 0;
+        users.rows.forEach((user, index) => {
+          // console.log(user.username === username, index)
+          if (user.username === username) {
+            console.log(index + 1)
+            user_id = index + 1;
+          }
+        });
+        // console.log(user_id)
+        const selectedChambers = await client.query(`Select * from chambers where user_id = $1`, [user_id]);
+        console.log(selectedChambers.rows);
+        res.json(selectedChambers.rows);
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { getChambers, viewChambers };

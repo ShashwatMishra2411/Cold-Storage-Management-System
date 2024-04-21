@@ -14,4 +14,5 @@ router.get("/verifyJWT", auth.verifyJWT);
 
 router.post("/items", chambers.getChambers);
 
+router.get("/chambers", chambers.viewChambers);
 module.exports = router;
