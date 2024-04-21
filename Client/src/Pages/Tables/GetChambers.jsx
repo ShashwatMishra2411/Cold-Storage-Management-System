@@ -7,22 +7,25 @@ export default function GetChambers(props) {
   const [duration, setDuration] = useState("");
   async function handleSubmit(e) {
     // This will prevent page refresh
+    const token = localStorage.getItem("token");
     e.preventDefault();
     try {
-      await fetch(`${URL_ORIGIN}/customers/items`, {
+      const chambers = await fetch(`${URL_ORIGIN}/customers/items`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          capacity: capacity,
-          commodities: commodities,
+          space: capacity,
+          item: commodities,
           duration: duration,
+          token: token,
         }),
       });
+      console.log("chambers = ",chambers);
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
   }
   return (
