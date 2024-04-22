@@ -44,7 +44,7 @@ export default function CPurchases() {
             // console.log(data);
             setRows(data);
             data.forEach((row) => {
-              row.forEach((commodity, index) => {
+              row.forEach((commodity) => {
                 // console.log(commodity.cost);
                 setAmount((prevAmount) => {
                   return prevAmount + commodity.cost;
