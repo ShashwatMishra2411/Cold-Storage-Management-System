@@ -40,3 +40,12 @@ td {
 .chamberForm:hover{
     cursor: pointer;
 }
+
+.amount{
+    font-size: 20px;
+    font-family: 'Bungee', sans-serif;
+    padding: 10px;
+    border: 4px solid black;
+    background-color: white;
+    margin: 20px;
+}

@@ -216,13 +216,15 @@ const getPurchases = async (req, res) =>{
         console.log(selectedChambers.rows);
         let commodities = await Promise.all(
           selectedChambers.rows.map(async (chamber) => {
-            console.log(chamber.chamber_id);
+            console.log(chamber.cost_per_unit);
             let comms = await client.query(
               `SELECT * FROM commodities WHERE chamber_id = $1`,
               [chamber.chamber_id]
             );
             console.log("hey = ", comms.rows);
-
+            comms.rows.forEach((commodity) => {
+              commodity.cost = commodity.amount * chamber.cost_per_unit;
+            });
             return comms.rows;
           })
         );

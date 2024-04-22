@@ -9,6 +9,7 @@ export default function CPurchases() {
   const navigate = useNavigate();
   const { isCAuthenticated, jwtCVerify } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [amount, setAmount] = useState(0);
 
   useEffect(() => {
     async function checkAuthentication() {
@@ -40,8 +41,16 @@ export default function CPurchases() {
           );
           if (response.status === 200) {
             const data = response.data;
-            console.log(data);
-            // setRows(data);
+            // console.log(data);
+            setRows(data);
+            data.forEach((row) => {
+              row.forEach((commodity, index) => {
+                // console.log(commodity.cost);
+                setAmount((prevAmount) => {
+                  return prevAmount + commodity.cost;
+                });
+              });
+            });
           } else {
             console.log("Error fetching commodities");
           }
@@ -63,23 +72,32 @@ export default function CPurchases() {
       <div className="back">
         <div style={{ fontSize: "50px" }}>Purchases</div>
         <table>
-          <tr>
-            <th>CID</th>
-            <th>From Date</th>
-            <th>To Date</th>
-            <th>Commodities</th>
-            <th>Total cost</th>
-          </tr>
+          <thead>
+            <tr>
+              {rows[0] &&
+                Object.keys(rows[0][0]).map((cell, index) => {
+                  if (index !== 2 && index !== 3) {
+                    return <th key={index}>{cell}</th>;
+                  }
+                })}
+            </tr>
+          </thead>
           <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
-                ))}
-              </tr>
-            ))}
+            {rows.map((row) => {
+              return row.map((commodity, index) => {
+                return (
+                  <tr key={index}>
+                    {Object.values(commodity).map((cell, cellIndex) => {
+                      if (cellIndex !== 2 && cellIndex !== 3)
+                        return <td key={cellIndex}>{cell}</td>;
+                    })}
+                  </tr>
+                );
+              });
+            })}
           </tbody>
         </table>
+        <div className="amount">Total = {amount}</div>
       </div>
     </>
   );
