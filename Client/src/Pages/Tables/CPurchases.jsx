@@ -2,28 +2,64 @@ import "./Tables.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contexts/AuthContext";
+import axios from "axios";
+import { URL_ORIGIN } from "../../constants";
 export default function CPurchases() {
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
-  const { isCAuthenticated } = useAuth();
+  const { isCAuthenticated, jwtCVerify } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    if (!isCAuthenticated) {
-      console.log(isCAuthenticated);
-      navigate("/login");
+    async function checkAuthentication() {
+      try {
+        console.log("Called by Purchases");
+        await jwtCVerify();
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error verifying JWT:", error);
+        setIsLoading(false);
+      }
     }
-  }, []);
+    checkAuthentication();
+  }, [jwtCVerify]);
 
   // Simulating useEffect to receive table contents
   useEffect(() => {
-    const tableData = [
-      ["1", "2022-01-01", "2022-01-02", "Potatoes", "USD500"],
-      ["2", "2022-01-01", "2022-01-02", "Tomatoes", "USD600"],
-    ];
-    setRows(tableData);
+    async function getChambers() {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const response = await axios.get(
+            `${URL_ORIGIN}/customers/purchases`,
+            {
+              headers: {
+                Authorization: `${token}`,
+              },
+            }
+          );
+          if (response.status === 200) {
+            const data = response.data;
+            console.log(data);
+            // setRows(data);
+          } else {
+            console.log("Error fetching commodities");
+          }
+        } else {
+          console.log("No token found");
+        }
+      } catch (error) {
+        console.error("Error fetching commodities:", error.message);
+      }
+    }
+    getChambers();
   }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
-      {isCAuthenticated ? null : navigate(-1)}
+      {isCAuthenticated ? null : navigate("/login")}
       <div className="back">
         <div style={{ fontSize: "50px" }}>Purchases</div>
         <table>
