@@ -113,7 +113,7 @@ const getChambers = async (req, res) => {
 
 const viewChambers = async (req, res) => {
   try {
-    const chambers = await client.query(`SELECT * FROM chambers`);
+    // const chambers = await client.query(`SELECT * FROM chambers`);
     // res.json(chambers.rows);
     const token = req.headers["authorization"];
     jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
@@ -126,13 +126,16 @@ const viewChambers = async (req, res) => {
         users.rows.forEach((user, index) => {
           // console.log(user.username === username, index)
           if (user.username === username) {
-            console.log(index + 1)
+            // console.log(index + 1)
             user_id = index + 1;
           }
         });
         // console.log(user_id)
-        const selectedChambers = await client.query(`Select * from chambers where user_id = $1`, [user_id]);
-        console.log(selectedChambers.rows);
+        const selectedChambers = await client.query(
+          `Select * from chambers where user_id = $1`,
+          [user_id]
+        );
+        // console.log(selectedChambers.rows);
         res.json(selectedChambers.rows);
       }
     });
@@ -142,4 +145,96 @@ const viewChambers = async (req, res) => {
   }
 };
 
-module.exports = { getChambers, viewChambers };
+const getCommodities = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid token" });
+      } else {
+        const username = decoded.username;
+        const users = await client.query(`SELECT username FROM customers`);
+        let user_id = 0;
+        users.rows.forEach((user, index) => {
+          // console.log(user.username === username, index)
+          if (user.username === username) {
+            // console.log(index + 1)
+            user_id = index + 1;
+          }
+        });
+        // console.log(user_id)
+        const selectedChambers = await client.query(
+          `Select * from chambers where user_id = $1`,
+          [user_id]
+        );
+        console.log(selectedChambers.rows);
+        let commodities = await Promise.all(
+          selectedChambers.rows.map(async (chamber) => {
+            console.log(chamber.chamber_id);
+            let comms = await client.query(
+              `SELECT * FROM commodities WHERE chamber_id = $1`,
+              [chamber.chamber_id]
+            );
+            console.log("hey = ", comms.rows);
+
+            return comms.rows;
+          })
+        );
+
+        console.log("comms = ", commodities);
+        res.json(commodities);
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getPurchases = async (req, res) =>{
+  try {
+    const token = req.headers["authorization"];
+    jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid token" });
+      } else {
+        const username = decoded.username;
+        const users = await client.query(`SELECT username FROM customers`);
+        let user_id = 0;
+        users.rows.forEach((user, index) => {
+          // console.log(user.username === username, index)
+          if (user.username === username) {
+            // console.log(index + 1)
+            user_id = index + 1;
+          }
+        });
+        // console.log(user_id)
+        const selectedChambers = await client.query(
+          `Select * from chambers where user_id = $1`,
+          [user_id]
+        );
+        console.log(selectedChambers.rows);
+        let commodities = await Promise.all(
+          selectedChambers.rows.map(async (chamber) => {
+            console.log(chamber.chamber_id);
+            let comms = await client.query(
+              `SELECT * FROM commodities WHERE chamber_id = $1`,
+              [chamber.chamber_id]
+            );
+            console.log("hey = ", comms.rows);
+
+            return comms.rows;
+          })
+        );
+
+        console.log("comms = ", commodities);
+        res.json(commodities);
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+
+}
+module.exports = { getChambers, viewChambers, getCommodities, getPurchases };
