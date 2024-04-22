@@ -191,7 +191,7 @@ const getCommodities = async (req, res) => {
   }
 };
 
-const getPurchases = async (req, res) =>{
+const getPurchases = async (req, res) => {
   try {
     const token = req.headers["authorization"];
     jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
@@ -214,6 +214,7 @@ const getPurchases = async (req, res) =>{
           [user_id]
         );
         console.log(selectedChambers.rows);
+        let bill = 0;
         let commodities = await Promise.all(
           selectedChambers.rows.map(async (chamber) => {
             console.log(chamber.cost_per_unit);
@@ -221,15 +222,20 @@ const getPurchases = async (req, res) =>{
               `SELECT * FROM commodities WHERE chamber_id = $1`,
               [chamber.chamber_id]
             );
-            console.log("hey = ", comms.rows);
+            // console.log("hey = ", comms.rows);
             comms.rows.forEach((commodity) => {
+              bill = bill + commodity.amount * chamber.cost_per_unit;
               commodity.cost = commodity.amount * chamber.cost_per_unit;
             });
             return comms.rows;
           })
         );
 
-        console.log("comms = ", commodities);
+        // console.log("comms = ", commodities);
+        await client.query(
+          `Update customers set bill_amt = $1 where username = $2`,
+          [bill, username]
+        );
         res.json(commodities);
       }
     });
@@ -237,6 +243,38 @@ const getPurchases = async (req, res) =>{
     console.log(error.message);
     res.status(500).json({ message: "Internal server error" });
   }
+};
 
-}
-module.exports = { getChambers, viewChambers, getCommodities, getPurchases };
+const getProfile = async (req, res) => {
+  const token = req.headers["authorization"];
+  jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid token" });
+    } else {
+      const username = decoded.username;
+      const users = await client.query(`SELECT * FROM customers`);
+      let user_id = 0;
+      // users.rows.forEach((user, index) => {
+      //   console.log(user.username, username, index)
+      //   if (user.username === username) {
+      //     console.log(index + 1);
+      //     user_id = index + 1;
+      //   }
+      // });
+      // console.log(user_id);
+      const profile = await client.query(
+        `SELECT * FROM customers WHERE username = $1`,
+        [username]
+      );
+      // console.log(profile.rows);
+      res.json(profile.rows);
+    }
+  });
+};
+module.exports = {
+  getChambers,
+  viewChambers,
+  getCommodities,
+  getPurchases,
+  getProfile,
+};
