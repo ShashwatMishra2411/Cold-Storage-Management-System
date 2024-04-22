@@ -20,6 +20,7 @@ table {
 th {
     border: solid black 5px;
     border-collapse: collapse;
+    padding: 20px;
 }
 
 td {

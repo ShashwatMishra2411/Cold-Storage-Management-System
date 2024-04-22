@@ -31,8 +31,7 @@ export default function CChambers() {
     checkAuthentication();
   }, [jwtCVerify]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     async function getChambers() {
       try {
         const token = localStorage.getItem("token");
@@ -57,7 +56,7 @@ export default function CChambers() {
       }
     }
     getChambers();
-  }, [])
+  }, []);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -69,18 +68,33 @@ export default function CChambers() {
         <div style={{ fontSize: "50px" }}>Chambers</div>
         <table>
           <thead>
-          <tr>
-            {rows[0] && Object.keys(rows[0]).map((cell, index)=>{
-              return <th key={index}>{cell}</th>
-            })}
-          </tr>
+            <tr>
+              {rows[0] &&
+                Object.keys(rows[0]).map((cell, index) => {
+                  return <th key={index}>{cell}</th>;
+                })}
+            </tr>
           </thead>
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
-                {Object.values(row).map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
-                ))}
+                {Object.values(row).map((cell, cellIndex) => {
+                  if (Array.isArray(cell)) {
+                    console.log("here");
+                    return (
+                      <td key={index}>
+                        {cell.map((item, i) => {
+                          return (
+                            <>
+                              <span key={i}>{item}</span>
+                              <br />
+                            </>
+                          );
+                        })}
+                      </td>
+                    );
+                  } else return <td key={cellIndex}>{cell}</td>;
+                })}
               </tr>
             ))}
           </tbody>
