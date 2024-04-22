@@ -20,7 +20,7 @@ export default function CChambers() {
   useEffect(() => {
     async function checkAuthentication() {
       try {
-        console.log("Called by Dashboard");
+        console.log("Called by Chambers");
         await jwtCVerify();
         setIsLoading(false);
       } catch (error) {
