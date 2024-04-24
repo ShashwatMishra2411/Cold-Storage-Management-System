@@ -44,6 +44,7 @@ export default function CChambers() {
           if (response.status === 200) {
             const data = response.data;
             console.log(Object.keys(data[0]));
+            console.log(data);
             setRows(data);
           } else {
             console.log("Error fetching chambers");
