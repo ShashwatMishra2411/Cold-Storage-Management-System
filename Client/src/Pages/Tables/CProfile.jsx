@@ -41,8 +41,9 @@ export default function CProfile() {
           );
           if (response.status === 200) {
             const data = response.data;
+            console.log("Data")
             console.log(data);
-            // setRows(data);
+            setRows(data);
           } else {
             console.log("Error fetching commodities");
           }
@@ -63,22 +64,24 @@ export default function CProfile() {
       {isCAuthenticated ? null : navigate("/login")}
       <div className="back">
         <div style={{ fontSize: "50px" }}>Profile</div>
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Contact</th>
-            <th>Email</th>
-            <th>Address</th>
-          </tr>
+        <table >
           <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
-                ))}
-              </tr>
-            ))}
+          <tr>
+            <th>Username</th>
+            {rows && rows[0] && <th>{rows[0].username}</th>}
+          </tr>
+          <tr>
+            <th>Password</th>
+            {rows && rows[0] && <th>{rows[0].password}</th>}
+          </tr>
+          <tr>
+            <th>Owner ID</th>
+            {rows && rows[0] && <th>{rows[0].owner_id}</th>}
+          </tr>
+          <tr>
+            <th>Bill Amount</th>
+            {rows && rows[0] && <th>{rows[0].bill_amt}</th>}
+          </tr>
           </tbody>
         </table>
       </div>
