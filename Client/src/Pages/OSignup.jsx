@@ -7,14 +7,17 @@ export default function OSignup() {
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
   const navigate = useNavigate();
-  // const [submitted, setSubmitted] = useState(false);
-  // const [error, setError] = useState("");
 
   async function handleSubmit(e) {
     // This will prevent page refresh
     e.preventDefault();
+    const confPassword = document.getElementById("confPassword");
+    if (password != confPassword.value) {
+      alert("Passwords do not match");
+      return;
+    }
     try {
-      await fetch(`${URL_ORIGIN}/customers/signup`, {
+      await fetch(`${URL_ORIGIN}/owners/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +35,7 @@ export default function OSignup() {
   return (
     <div className="back">
       <form
-        onSubmit={submit}
+        onSubmit={handleSubmit}
         style={{ display: "flex", flexDirection: "column" }}
       >
         <label htmlFor="username">Username</label>
@@ -67,7 +70,6 @@ export default function OSignup() {
           type="password"
           id="confPassword"
           className="txt"
-          value={password}
           onChange={(e) => setpassword(e.target.value)}
           required
         />
