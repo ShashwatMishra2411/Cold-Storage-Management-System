@@ -2,6 +2,10 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { URL_ORIGIN } from "../constants";
 import axios from "axios";
 const jwtContext = createContext();
+export function useAuth() {
+  return useContext(jwtContext);
+}
+
 function JwtContextProvider({ children }) {
   const [isCAuthenticated, setIsCAuthenticated] = useState(false);
   const [isOAuthenticated, setIsOAuthenticated] = useState(false);
@@ -34,12 +38,9 @@ function JwtContextProvider({ children }) {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        const response = await fetch(`${URL_ORIGIN}/owners/verifyJWT`, {
-          method: "GET",
+        const response = await axios.get(`${URL_ORIGIN}/owners/verifyJWT`, {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-            Accept: "application/json",
+            Authorization: `${token}`,
           },
         });
         if (response.status === 200) {
@@ -68,6 +69,3 @@ function JwtContextProvider({ children }) {
   return <jwtContext.Provider value={value}>{children}</jwtContext.Provider>;
 }
 export default JwtContextProvider;
-export function useAuth() {
-  return useContext(jwtContext);
-}

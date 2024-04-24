@@ -11,6 +11,7 @@ export default function OSignup() {
   async function handleSubmit(e) {
     // This will prevent page refresh
     e.preventDefault();
+    console.log("hey")
     const confPassword = document.getElementById("confPassword");
     if (password != confPassword.value) {
       alert("Passwords do not match");

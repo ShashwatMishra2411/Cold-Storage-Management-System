@@ -1,33 +1,41 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
-const {signup, login, verifyJWT} = require('../middleware/auth');
+const { signup, login, verifyJWT } = require("../middleware/auth");
 require("dotenv").config();
-const {getMachinery, addMachinery} = require('../middleware/machinery');
-const {getInfrastructure, addInfrastructure} = require('../middleware/infrastructure');
-const { getRawMaterials, addRawMaterials } = require('../middleware/rawMaterials');
-const { getGrowth } = require('../middleware/updateGrowth');
+const { getMachinery, addMachinery } = require("../middleware/machinery");
+const {
+  getInfrastructure,
+  addInfrastructure,
+  getChambers,
+} = require("../middleware/infrastructure");
+const {
+  getRawMaterials,
+  addRawMaterials,
+} = require("../middleware/rawMaterials");
+const { getGrowth } = require("../middleware/updateGrowth");
 
+router.post("/signup", signup);
 
-router.post('/signup', signup);
+router.post("/login", login);
 
-router.post('/login', login);
+router.get("/verifyJWT", verifyJWT);
 
-router.get('/verifyJWT', verifyJWT);
+router.get("/machinery", getMachinery);
 
-router.get('/machinery', getMachinery);
+router.post("/addMachinery", addMachinery);
 
-router.post('/addMachinery', addMachinery);
+router.post("/addInfrastructure", addInfrastructure);
 
-router.post('/addInfrastructure', addInfrastructure);
+router.get("/infrastructure", getInfrastructure);
 
-router.get('/infrastructure', getInfrastructure);
+router.get("/rawMaterials", getRawMaterials);
 
-router.get('/rawMaterials', getRawMaterials);
+router.post("/addRawMaterials", addRawMaterials);
 
-router.post('/addRawMaterials', addRawMaterials)
+router.get("/growthupdate", getGrowth);
 
-router.get('/growthupdate', getGrowth);
+router.get("/chambers", getChambers);
 
 // router.post('/signup',async (req, res)=>{
 //     console.log(req.body);
@@ -65,6 +73,5 @@ router.get('/growthupdate', getGrowth);
 //     }
 //     )
 // })
-
 
 module.exports = router;

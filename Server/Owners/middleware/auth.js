@@ -1,17 +1,21 @@
-const { owner } = require("../../db");
+const { client1 } = require("../../db");
 const jwt = require("jsonwebtoken");
 
-const signup = async (req, res, next) => {
+const signup = async (req, res) => {
+  console.log("hello")
   console.log(req.body);
-  const { username, password, email, mobno } = req.body;
-  await owner.query("select * from owners", (err, result) => {
+  const { username, password} = req.body;
+  console.log("username = ",username);
+  console.log("password = ",password);
+  // console.log(client1)
+  await client1.query("Select * from owners", (err, result) => {
     if (err) {
       console.log(err);
     } else {
       console.log(result.rows);
     }
   });
-  await owner.query(
+  await client1.query(
     `select * from owners where username = '${username}'`,
     (err, result) => {
       if (err) {
@@ -21,8 +25,8 @@ const signup = async (req, res, next) => {
         if (result.rows.length > 0) {
           res.json({ message: "User already exists" });
         } else {
-          owner.query(
-            `INSERT INTO owners (username, password, email, mobno) VALUES ( '${username}', '${password}', '${email}', ${mobno}`,
+          client1.query(
+            `INSERT INTO owners (username, password) VALUES ( '${username}', '${password}')`,
             (err, result) => {
               if (err) {
                 console.log(err);
@@ -40,7 +44,7 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
-  await owner.query(
+  await client1.query(
     `SELECT * FROM owners WHERE username = '${username}' AND password = '${password}'`,
     (err, result) => {
       if (result.rows.length > 0) {
