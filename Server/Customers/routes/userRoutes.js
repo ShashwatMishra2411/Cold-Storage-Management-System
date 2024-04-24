@@ -15,4 +15,10 @@ router.get("/verifyJWT", auth.verifyJWT);
 router.post("/items", chambers.getChambers);
 
 router.get("/chambers", chambers.viewChambers);
+
+router.get("/commodities", chambers.getCommodities);
+
+router.get("/purchases", chambers.getPurchases);
+
+router.get("/profile", chambers.getProfile);
 module.exports = router;

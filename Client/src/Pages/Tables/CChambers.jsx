@@ -20,7 +20,7 @@ export default function CChambers() {
   useEffect(() => {
     async function checkAuthentication() {
       try {
-        console.log("Called by Dashboard");
+        console.log("Called by Chambers");
         await jwtCVerify();
         setIsLoading(false);
       } catch (error) {
@@ -80,9 +80,9 @@ export default function CChambers() {
               <tr key={index}>
                 {Object.values(row).map((cell, cellIndex) => {
                   if (Array.isArray(cell)) {
-                    console.log("here");
+                    // console.log("here");
                     return (
-                      <td key={index}>
+                      <td key={cellIndex}>
                         {cell.map((item, i) => {
                           return (
                             <>
