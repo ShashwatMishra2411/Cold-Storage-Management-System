@@ -2,58 +2,90 @@ import "./Tables.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contexts/AuthContext";
+import axios from "axios";
+import { URL_ORIGIN } from "../../constants";
 
 export default function OProfile() {
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
-  const { isOAuthenticated } = useAuth();
+  const { isOAuthenticated, jwtOVerify } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    if (!isOAuthenticated) {
-      console.log(isOAuthenticated);
-      navigate("/login");
+    async function checkAuthentication() {
+      try {
+        console.log("Called by Profile");
+        await jwtOVerify();
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error verifying JWT:", error);
+        setIsLoading(false);
+      }
     }
-  }, []);
+    checkAuthentication();
+  }, [jwtOVerify]);
+
   // Simulating useEffect to receive table contents
   useEffect(() => {
-    const tableData = [
-      [
-        "1",
-        "John Doe",
-        "1234567890",
-        "g@gmail.com",
-        "123, ABC Street, XYZ City",
-      ],
-      [
-        "2",
-        "Jane Doe",
-        "1234567890",
-        "z@gmail.com",
-        "456, DEF Street, XYZ City",
-      ],
-    ];
-    setRows(tableData);
+    async function getChambers() {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const response = await axios.get(
+            `${URL_ORIGIN}/owners/profile`,
+            {
+              headers: {
+                Authorization: `${token}`,
+              },
+            }
+          );
+          if (response.status === 200) {
+            const data = response.data;
+            console.log("Data")
+            console.log(data);
+            setRows(data);
+          } else {
+            console.log("Error fetching profile");
+          }
+        } else {
+          console.log("No token found");
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error.message);
+      }
+    }
+    getChambers();
   }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
-      {isOAuthenticated ? null : navigate(-1)}
+      {isOAuthenticated ? null : navigate("/login")}
       <div className="back">
         <div style={{ fontSize: "50px" }}>Profile</div>
-        <table>
+        <table >
+          <tbody>
           <tr>
             <th>ID</th>
-            <th>Username</th>
-            <th>Contact</th>
-            <th>Email</th>
-            <th>Address</th>
+            {rows && rows[0] && <th>{rows[0].id}</th>}
           </tr>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
-                ))}
-              </tr>
-            ))}
+          <tr>
+            <th>Username</th>
+            {rows && rows[0] && <th>{rows[0].username}</th>}
+          </tr>
+          <tr>
+            <th>Password</th>
+            {rows && rows[0] && <th>{rows[0].password}</th>}
+          </tr>
+          {/* <tr>
+            <th>Owner ID</th>
+            {rows && rows[0] && <th>{rows[0].owner_id}</th>}
+          </tr>
+          <tr>
+            <th>Bill Amount</th>
+            {rows && rows[0] && <th>{rows[0].bill_amt}</th>}
+          </tr> */}
           </tbody>
         </table>
       </div>

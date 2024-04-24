@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const token = await fetch(
-        `${URL_ORIGIN}/${localStorage.getItem("user")}s/login`,
+        `${URL_ORIGIN}/${side.value}/login`,
         {
           method: "POST",
           headers: {
@@ -30,7 +30,7 @@ export default function Login() {
         localStorage.setItem("token", data.token);
         console.log("called");
         await jwtCVerify();
-        navigate(`/${side.value}dashboard`);
+        navigate(`/${side.value[0].toUpperCase()}dashboard`);
       } else {
         const data = await token.json();
         alert(data.message);

@@ -40,4 +40,17 @@ const getChambers = async (req, res) => {
   });
 };
 
-module.exports = { getInfrastructure, addInfrastructure, getChambers };
+const getCustomers = async (req, res) => {
+  const token = req.headers["authorization"];
+  jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid token" });
+    } else {
+      const username = decoded.username;
+      const customers = await client1.query(`SELECT * FROM customers`);
+      res.json(customers.rows);
+    }
+  });
+}
+
+module.exports = { getInfrastructure, addInfrastructure, getChambers, getCustomers };

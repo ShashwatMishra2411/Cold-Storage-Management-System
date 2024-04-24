@@ -1,4 +1,4 @@
-const client = require("../../db");
+const { client } = require("../../db");
 const jwt = require("jsonwebtoken");
 
 const getChambers = async (req, res) => {
@@ -124,13 +124,13 @@ const viewChambers = async (req, res) => {
         const users = await client.query(`SELECT username FROM customers`);
         let user_id = 0;
         users.rows.forEach((user, index) => {
-          console.log(user.username, username, index)
+          console.log(user.username, username, index);
           if (user.username === username) {
-            console.log(index + 1)
+            console.log(index + 1);
             user_id = index + 1;
           }
         });
-        console.log(user_id)
+        console.log(user_id);
         const selectedChambers = await client.query(
           `Select * from chambers where user_id = $1`,
           [user_id]

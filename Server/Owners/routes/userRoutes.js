@@ -1,13 +1,14 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const { signup, login, verifyJWT } = require("../middleware/auth");
+const { signup, login, verifyJWT, getProfile } = require("../middleware/auth");
 require("dotenv").config();
 const { getMachinery, addMachinery } = require("../middleware/machinery");
 const {
   getInfrastructure,
   addInfrastructure,
   getChambers,
+  getCustomers,
 } = require("../middleware/infrastructure");
 const {
   getRawMaterials,
@@ -37,6 +38,9 @@ router.get("/growthupdate", getGrowth);
 
 router.get("/chambers", getChambers);
 
+router.get("/customers", getCustomers);
+
+router.get("/profile", getProfile);
 // router.post('/signup',async (req, res)=>{
 //     console.log(req.body);
 //     console.log("hello");

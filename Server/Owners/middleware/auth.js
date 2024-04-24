@@ -74,4 +74,21 @@ const verifyJWT = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, verifyJWT };
+
+const getProfile = async (req, res) => {
+  const token = req.headers["authorization"];
+  jwt.verify(token, process.env.PRIVATE_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid token" });
+    } else {
+      const username = decoded.username;
+      const users = await client1.query(`SELECT * FROM owners`);
+      const profile = await client1.query(
+        `SELECT * FROM owners WHERE username = $1`,
+        [username]
+      );
+      res.json(profile.rows);
+    }
+  });
+};
+module.exports = { signup, login, verifyJWT, getProfile };
