@@ -11,7 +11,7 @@ export default function OSignup() {
   async function handleSubmit(e) {
     // This will prevent page refresh
     e.preventDefault();
-    console.log("hey")
+    console.log("hey");
     const confPassword = document.getElementById("confPassword");
     if (password != confPassword.value) {
       alert("Passwords do not match");
@@ -67,13 +67,7 @@ export default function OSignup() {
           required
         />
         <label htmlFor="confPassword">Confirm Password</label>
-        <input
-          type="password"
-          id="confPassword"
-          className="txt"
-          onChange={(e) => setpassword(e.target.value)}
-          required
-        />
+        <input type="password" id="confPassword" className="txt" required />
         <button type="submit" className="subBut" onClick={handleSubmit}>
           Submit
         </button>

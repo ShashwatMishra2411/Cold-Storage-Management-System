@@ -66,13 +66,7 @@ export default function CSignup() {
           required
         />
         <label htmlFor="confPassword">Confirm Password</label>
-        <input
-          type="password"
-          id="confPassword"
-          className="txt"
-          onChange={(e) => setpassword(e.target.value)}
-          required
-        />
+        <input type="password" id="confPassword" className="txt" required />
         <button type="submit" className="subBut">
           Submit
         </button>
